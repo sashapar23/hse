@@ -1,0 +1,297 @@
+
+GccBoardProject2.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000015a  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000012  00800060  0000015a  000001ce  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001e0  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000210  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000048  00000000  00000000  0000024c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000272  00000000  00000000  00000294  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000018a  00000000  00000000  00000506  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000003a1  00000000  00000000  00000690  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000104  00000000  00000000  00000a34  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00005f27  00000000  00000000  00000b38  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000215  00000000  00000000  00006a5f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000038  00000000  00000000  00006c74  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_macro  00000228  00000000  00000000  00006cac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	24 c0       	rjmp	.+72     	; 0x4c <__bad_interrupt>
+   4:	23 c0       	rjmp	.+70     	; 0x4c <__bad_interrupt>
+   6:	7e c0       	rjmp	.+252    	; 0x104 <__vector_3>
+   8:	21 c0       	rjmp	.+66     	; 0x4c <__bad_interrupt>
+   a:	20 c0       	rjmp	.+64     	; 0x4c <__bad_interrupt>
+   c:	4b c0       	rjmp	.+150    	; 0xa4 <__vector_6>
+   e:	1e c0       	rjmp	.+60     	; 0x4c <__bad_interrupt>
+  10:	1d c0       	rjmp	.+58     	; 0x4c <__bad_interrupt>
+  12:	1c c0       	rjmp	.+56     	; 0x4c <__bad_interrupt>
+  14:	1b c0       	rjmp	.+54     	; 0x4c <__bad_interrupt>
+  16:	1a c0       	rjmp	.+52     	; 0x4c <__bad_interrupt>
+  18:	19 c0       	rjmp	.+50     	; 0x4c <__bad_interrupt>
+  1a:	18 c0       	rjmp	.+48     	; 0x4c <__bad_interrupt>
+  1c:	17 c0       	rjmp	.+46     	; 0x4c <__bad_interrupt>
+  1e:	16 c0       	rjmp	.+44     	; 0x4c <__bad_interrupt>
+  20:	15 c0       	rjmp	.+42     	; 0x4c <__bad_interrupt>
+  22:	14 c0       	rjmp	.+40     	; 0x4c <__bad_interrupt>
+  24:	13 c0       	rjmp	.+38     	; 0x4c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	ea e5       	ldi	r30, 0x5A	; 90
+  3a:	f1 e0       	ldi	r31, 0x01	; 1
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	a2 37       	cpi	r26, 0x72	; 114
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+  48:	82 d0       	rcall	.+260    	; 0x14e <main>
+  4a:	85 c0       	rjmp	.+266    	; 0x156 <_exit>
+
+0000004c <__bad_interrupt>:
+  4c:	d9 cf       	rjmp	.-78     	; 0x0 <__vectors>
+
+0000004e <serial_avr>:
+unsigned char TIMER1_STR[] = "ping\r\n";
+unsigned char TIMER2_STR[] = "pong\r\n";
+
+//вывод строки в USART
+void serial_avr(char *str)
+{
+  4e:	fc 01       	movw	r30, r24
+	UCSRB=(1<<TXEN);
+  50:	88 e0       	ldi	r24, 0x08	; 8
+  52:	8a b9       	out	0x0a, r24	; 10
+	UCSRC=(1<<UCSZ1)|(1<<UCSZ0)|(1<<URSEL);
+  54:	86 e8       	ldi	r24, 0x86	; 134
+  56:	80 bd       	out	0x20, r24	; 32
+	UBRRL=51;
+  58:	83 e3       	ldi	r24, 0x33	; 51
+  5a:	89 b9       	out	0x09, r24	; 9
+	
+	for (unsigned int i=0; str[i]!=0; i++)
+  5c:	90 81       	ld	r25, Z
+  5e:	99 23       	and	r25, r25
+  60:	39 f0       	breq	.+14     	; 0x70 <serial_avr+0x22>
+  62:	31 96       	adiw	r30, 0x01	; 1
+	{
+		UDR=str[i];
+  64:	9c b9       	out	0x0c, r25	; 12
+		while(!(UCSRA&(1<<UDRE)));
+  66:	5d 9b       	sbis	0x0b, 5	; 11
+  68:	fe cf       	rjmp	.-4      	; 0x66 <serial_avr+0x18>
+{
+	UCSRB=(1<<TXEN);
+	UCSRC=(1<<UCSZ1)|(1<<UCSZ0)|(1<<URSEL);
+	UBRRL=51;
+	
+	for (unsigned int i=0; str[i]!=0; i++)
+  6a:	91 91       	ld	r25, Z+
+  6c:	91 11       	cpse	r25, r1
+  6e:	fa cf       	rjmp	.-12     	; 0x64 <serial_avr+0x16>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  70:	2f e9       	ldi	r18, 0x9F	; 159
+  72:	86 e8       	ldi	r24, 0x86	; 134
+  74:	91 e0       	ldi	r25, 0x01	; 1
+  76:	21 50       	subi	r18, 0x01	; 1
+  78:	80 40       	sbci	r24, 0x00	; 0
+  7a:	90 40       	sbci	r25, 0x00	; 0
+  7c:	e1 f7       	brne	.-8      	; 0x76 <serial_avr+0x28>
+  7e:	00 c0       	rjmp	.+0      	; 0x80 <serial_avr+0x32>
+  80:	00 00       	nop
+  82:	08 95       	ret
+
+00000084 <timer1_ini>:
+}
+
+//инициализация timer1
+void timer1_ini(void)
+{
+	TCCR1B |= (1<<WGM12); // устанавливаем режим СТС (сброс по совпадению)
+  84:	8e b5       	in	r24, 0x2e	; 46
+  86:	88 60       	ori	r24, 0x08	; 8
+  88:	8e bd       	out	0x2e, r24	; 46
+	TIMSK |= (1<<OCIE1A);	//устанавливаем бит разрешения прерывания 1ого счетчика по совпадению с OCR1A(H и L)
+  8a:	89 b7       	in	r24, 0x39	; 57
+  8c:	80 61       	ori	r24, 0x10	; 16
+  8e:	89 bf       	out	0x39, r24	; 57
+	OCR1A = TIMER1_INTERVAL; //записываем в регистр число для сравнения
+  90:	80 91 70 00 	lds	r24, 0x0070
+  94:	90 91 71 00 	lds	r25, 0x0071
+  98:	9b bd       	out	0x2b, r25	; 43
+  9a:	8a bd       	out	0x2a, r24	; 42
+	TCCR1B |= (1<<CS11) | (1<<CS10);//установим делитель на 64
+  9c:	8e b5       	in	r24, 0x2e	; 46
+  9e:	83 60       	ori	r24, 0x03	; 3
+  a0:	8e bd       	out	0x2e, r24	; 46
+  a2:	08 95       	ret
+
+000000a4 <__vector_6>:
+	//интервал 2 сек
+}
+
+//обработка прерывания для timer1 по совпадению
+ISR (TIMER1_COMPA_vect)
+{
+  a4:	1f 92       	push	r1
+  a6:	0f 92       	push	r0
+  a8:	0f b6       	in	r0, 0x3f	; 63
+  aa:	0f 92       	push	r0
+  ac:	11 24       	eor	r1, r1
+  ae:	2f 93       	push	r18
+  b0:	3f 93       	push	r19
+  b2:	4f 93       	push	r20
+  b4:	5f 93       	push	r21
+  b6:	6f 93       	push	r22
+  b8:	7f 93       	push	r23
+  ba:	8f 93       	push	r24
+  bc:	9f 93       	push	r25
+  be:	af 93       	push	r26
+  c0:	bf 93       	push	r27
+  c2:	ef 93       	push	r30
+  c4:	ff 93       	push	r31
+	//вывести строку в USART
+	serial_avr(TIMER1_STR);
+  c6:	87 e6       	ldi	r24, 0x67	; 103
+  c8:	90 e0       	ldi	r25, 0x00	; 0
+  ca:	c1 df       	rcall	.-126    	; 0x4e <serial_avr>
+}
+  cc:	ff 91       	pop	r31
+  ce:	ef 91       	pop	r30
+  d0:	bf 91       	pop	r27
+  d2:	af 91       	pop	r26
+  d4:	9f 91       	pop	r25
+  d6:	8f 91       	pop	r24
+  d8:	7f 91       	pop	r23
+  da:	6f 91       	pop	r22
+  dc:	5f 91       	pop	r21
+  de:	4f 91       	pop	r20
+  e0:	3f 91       	pop	r19
+  e2:	2f 91       	pop	r18
+  e4:	0f 90       	pop	r0
+  e6:	0f be       	out	0x3f, r0	; 63
+  e8:	0f 90       	pop	r0
+  ea:	1f 90       	pop	r1
+  ec:	18 95       	reti
+
+000000ee <timer2_ini>:
+
+//инициализация timer2
+void timer2_ini(void)
+{
+	TCCR2 = (1<<WGM21); // устанавливаем режим СТС (сброс по совпадению)
+  ee:	88 e0       	ldi	r24, 0x08	; 8
+  f0:	85 bd       	out	0x25, r24	; 37
+	TIMSK = (1<<OCIE2); ///устанавливаем бит разрешения прерывания 2ого счетчика по совпадению
+  f2:	80 e8       	ldi	r24, 0x80	; 128
+  f4:	89 bf       	out	0x39, r24	; 57
+	OCR2 = TIMER2_INTERVAL; //записываем в регистр число для сравнения
+  f6:	80 91 6e 00 	lds	r24, 0x006E
+  fa:	83 bd       	out	0x23, r24	; 35
+	TCCR2 |= (1<<CS22) | (1<<CS21); //установим делитель на 256
+  fc:	85 b5       	in	r24, 0x25	; 37
+  fe:	86 60       	ori	r24, 0x06	; 6
+ 100:	85 bd       	out	0x25, r24	; 37
+ 102:	08 95       	ret
+
+00000104 <__vector_3>:
+	//интервал
+}
+
+//обработка прерывания для timer2 по совпадению
+ISR (TIMER2_COMP_vect)
+{
+ 104:	1f 92       	push	r1
+ 106:	0f 92       	push	r0
+ 108:	0f b6       	in	r0, 0x3f	; 63
+ 10a:	0f 92       	push	r0
+ 10c:	11 24       	eor	r1, r1
+ 10e:	2f 93       	push	r18
+ 110:	3f 93       	push	r19
+ 112:	4f 93       	push	r20
+ 114:	5f 93       	push	r21
+ 116:	6f 93       	push	r22
+ 118:	7f 93       	push	r23
+ 11a:	8f 93       	push	r24
+ 11c:	9f 93       	push	r25
+ 11e:	af 93       	push	r26
+ 120:	bf 93       	push	r27
+ 122:	ef 93       	push	r30
+ 124:	ff 93       	push	r31
+	//вывести строку в USART
+	serial_avr(TIMER2_STR);
+ 126:	80 e6       	ldi	r24, 0x60	; 96
+ 128:	90 e0       	ldi	r25, 0x00	; 0
+ 12a:	91 df       	rcall	.-222    	; 0x4e <serial_avr>
+}
+ 12c:	ff 91       	pop	r31
+ 12e:	ef 91       	pop	r30
+ 130:	bf 91       	pop	r27
+ 132:	af 91       	pop	r26
+ 134:	9f 91       	pop	r25
+ 136:	8f 91       	pop	r24
+ 138:	7f 91       	pop	r23
+ 13a:	6f 91       	pop	r22
+ 13c:	5f 91       	pop	r21
+ 13e:	4f 91       	pop	r20
+ 140:	3f 91       	pop	r19
+ 142:	2f 91       	pop	r18
+ 144:	0f 90       	pop	r0
+ 146:	0f be       	out	0x3f, r0	; 63
+ 148:	0f 90       	pop	r0
+ 14a:	1f 90       	pop	r1
+ 14c:	18 95       	reti
+
+0000014e <main>:
+//--------------------------------------------
+int main(void)
+{
+	timer2_ini();
+ 14e:	cf df       	rcall	.-98     	; 0xee <timer2_ini>
+	timer1_ini();
+ 150:	99 df       	rcall	.-206    	; 0x84 <timer1_ini>
+	sei();
+ 152:	78 94       	sei
+	while(1)
+	{
+	}
+ 154:	ff cf       	rjmp	.-2      	; 0x154 <main+0x6>
+
+00000156 <_exit>:
+ 156:	f8 94       	cli
+
+00000158 <__stop_program>:
+ 158:	ff cf       	rjmp	.-2      	; 0x158 <__stop_program>
