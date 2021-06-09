@@ -1,0 +1,45 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+<script type="text/javascript" src="jquery.min.js"></script>
+</head>
+<body><p>Hello World!</p>
+<form action="cgi-bin/serv.py" method="POST" enctype="multipart/form-data">
+            Введите ваше число:<br/>
+            <input name="data" type="number" id="data" /><br/>
+            <input type="submit" id="btn" value="Отправить" />
+        </form>
+        <p id="server"></p>
+        <script type="text/javascript">
+$( document ).ready(function() {
+
+    $("#btn").click(
+		function(){
+                        sendAjaxForm('result_form', 'data', '/cgi-bin/serv.py');
+			return false;            
+		}
+        
+	);
+});
+
+function sendAjaxForm(result_form, data, url) {
+    $.ajax({
+        url:     url, //url страницы (action_ajax_form.php)
+        type:     "POST", //метод отправки
+        dataType: "html", //формат данных
+        data: $("#"+data).serialize(),  // Сеарилизуем объект
+        success: function(response) { //Данные отправлены успешно
+            serv = $.parseJSON(response);
+            // $('#head-sveden').append(all.sveden);
+            
+
+                $('#server').append('<p>'+serv.value+'</p>');
+
+
+
+}});}
+
+
+</script>
+</body>
+</html>
